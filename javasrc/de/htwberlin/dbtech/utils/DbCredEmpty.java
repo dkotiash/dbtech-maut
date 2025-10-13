@@ -7,3 +7,4 @@ public interface DbCredEmpty {
     String password = "ppp";
     String schema = "uuu";
 }
+
