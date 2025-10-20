@@ -70,8 +70,27 @@ public class MautVerwaltungImpl implements IMautVerwaltung {
 
 	@Override
 	public void updateStatusForOnBoardUnit(long fzg_id, String status) {
-		// TODO Auto-generated method stub
+		if (status == null || status.isBlank()) {
+			throw new IllegalArgumentException("status darf nicht leer sein");
+		}
+		String query = "UPDATE U596635.FAHRZEUGGERAT SET STATUS = ? WHERE FZG_ID = ?";;
 
+		try {
+			PreparedStatement ps = getConnection().prepareStatement(query);
+			// 1. Platzhalter (= STATUS)
+			ps.setString(1, status);
+			// 2. Platzhalter (= FZG_ID)
+			ps.setLong(2, fzg_id);
+			int rows = ps.executeUpdate();
+			if (rows == 0) {
+				throw new IllegalStateException("Kein Fahrzeuggerät mit FZG_ID=" + fzg_id + " gefunden.");
+			}
+
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		} catch (NullPointerException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	@Override
