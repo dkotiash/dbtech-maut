@@ -1,5 +1,7 @@
-package de.htwberlin.dbtech.aufgaben.ue03;
+package de.htwberlin.dbtech.aufgaben.ue03.test;
 
+import de.htwberlin.dbtech.aufgaben.ue03.mauterhebung.IMautService;
+import de.htwberlin.dbtech.aufgaben.ue03.mauterhebung.MautServiceImpl;
 import de.htwberlin.dbtech.exceptions.AlreadyCruisedException;
 import de.htwberlin.dbtech.exceptions.InvalidVehicleDataException;
 import de.htwberlin.dbtech.exceptions.UnkownVehicleException;

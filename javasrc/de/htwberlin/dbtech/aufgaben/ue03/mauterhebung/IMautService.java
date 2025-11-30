@@ -1,4 +1,4 @@
-package de.htwberlin.dbtech.aufgaben.ue03;
+package de.htwberlin.dbtech.aufgaben.ue03.mauterhebung;
 
 import de.htwberlin.dbtech.exceptions.AlreadyCruisedException;
 import de.htwberlin.dbtech.exceptions.InvalidVehicleDataException;
