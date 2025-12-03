@@ -18,7 +18,7 @@ public class MautDaoImpl implements MautDao {
     }
 
     @Override
-    public FahrzeugData findObuData(String kennzeichen) {
+    public FahrzeugData findFahrzeugData(String kennzeichen) {
         // FIX: Wir holen fg.FZG_ID (Geräte-ID), NICHT f.FZ_ID (Fahrzeug-ID).
         // f.FZ_ID ist zu groß für die MAUTERHEBUNG Tabelle.
         String sql = "SELECT fg.FZG_ID, f.SSKL_ID, f.ACHSEN " +

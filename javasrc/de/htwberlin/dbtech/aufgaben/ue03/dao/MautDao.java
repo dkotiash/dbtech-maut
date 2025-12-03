@@ -5,7 +5,7 @@ import de.htwberlin.dbtech.aufgaben.ue03.object.MautKategorieInfo;
 import de.htwberlin.dbtech.aufgaben.ue03.object.FahrzeugData;
 
 public interface MautDao {
-    FahrzeugData findObuData(String kennzeichen);
+    FahrzeugData findFahrzeugData(String kennzeichen);
 
     BuchungData findBuchungData(String kennzeichen, int abschnittId);
 
