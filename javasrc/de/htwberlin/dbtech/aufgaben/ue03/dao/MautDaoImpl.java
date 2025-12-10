@@ -19,8 +19,6 @@ public class MautDaoImpl implements MautDao {
 
     @Override
     public FahrzeugData findFahrzeugData(String kennzeichen) {
-        // FIX: Wir holen fg.FZG_ID (Geräte-ID), NICHT f.FZ_ID (Fahrzeug-ID).
-        // f.FZ_ID ist zu groß für die MAUTERHEBUNG Tabelle.
         String sql = "SELECT fg.FZG_ID, f.SSKL_ID, f.ACHSEN " +
                 "FROM FAHRZEUG f " +
                 "JOIN FAHRZEUGGERAT fg ON f.FZ_ID = fg.FZ_ID " +
@@ -29,7 +27,7 @@ public class MautDaoImpl implements MautDao {
             ps.setString(1, kennzeichen);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    long fzgId = rs.getLong("FZG_ID"); // Jetzt korrekte Spalte
+                    long fzgId = rs.getLong("FZG_ID");
                     int sskl = parseIntSafe(rs, "SSKL_ID");
                     int achsen = parseIntSafe(rs, "ACHSEN");
                     return new FahrzeugData(fzgId, sskl, achsen);
@@ -74,8 +72,6 @@ public class MautDaoImpl implements MautDao {
 
     @Override
     public MautKategorieInfo findMautKategorie(int ssklId, int achsZahl) {
-        // FIX für ORA-01722: Wir laden alle Kategorien der SSKL und suchen den Match in Java.
-        // Das SQL "ACHSZAHL <= ?" schlägt fehl, weil in der DB Strings wie ">= 4" stehen.
         String sql = "SELECT KATEGORIE_ID, MAUTSATZ_JE_KM, ACHSZAHL FROM MAUTKATEGORIE WHERE SSKL_ID = ?";
 
         MautKategorieInfo bestMatch = null;
@@ -87,11 +83,8 @@ public class MautDaoImpl implements MautDao {
                 while (rs.next()) {
                     int currentId = rs.getInt("KATEGORIE_ID");
                     float currentSatz = rs.getFloat("MAUTSATZ_JE_KM");
-                    // parseIntSafe wandelt ">= 4" in 4 um
                     int catAchsen = parseIntSafe(rs, "ACHSZAHL");
 
-                    // Wir suchen die Kategorie mit den höchsten Achsen, die noch <= input ist.
-                    // Beispiel Input 5: Passt auf Kat 2 und Kat 4. Wir nehmen 4.
                     if (catAchsen <= achsZahl) {
                         if (catAchsen > bestMatchAchsen) {
                             bestMatchAchsen = catAchsen;
@@ -120,7 +113,7 @@ public class MautDaoImpl implements MautDao {
             try (PreparedStatement ps = connection.prepareStatement(sql)) {
                 ps.setLong(1, nextId);
                 ps.setInt(2, abschnittId);
-                ps.setLong(3, fzgId); // Das muss die OBU-ID sein (fg.FZG_ID), nicht die Auto-ID!
+                ps.setLong(3, fzgId);
                 ps.setInt(4, katId);
                 ps.setDate(5, new Date(System.currentTimeMillis()));
                 ps.setFloat(6, kosten);
@@ -139,11 +132,10 @@ public class MautDaoImpl implements MautDao {
         } catch (SQLException e) { throw new DataException(e); }
     }
 
-    // Entfernt Sonderzeichen und parst Zahlen robust
     private int parseIntSafe(ResultSet rs, String columnLabel) throws SQLException {
         String val = rs.getString(columnLabel);
         if (val == null) return 0;
-        String cleanVal = val.replaceAll("[^0-9]", ""); // Alles außer Ziffern weg
+        String cleanVal = val.replaceAll("[^0-9]", "");
         if (cleanVal.isEmpty()) return 0;
         try {
             return Integer.parseInt(cleanVal);

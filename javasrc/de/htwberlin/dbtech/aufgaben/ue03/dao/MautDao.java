@@ -13,9 +13,7 @@ public interface MautDao {
 
     MautKategorieInfo findMautKategorie(int ssklId, int achsZahl);
 
-    // fzgId ist jetzt long
     void saveMauterhebung(int abschnittId, long fzgId, int katId, float kosten);
 
-    // buchungId ist jetzt long
     void updateBuchungStatus(long buchungId, int neuerStatusId);
 }

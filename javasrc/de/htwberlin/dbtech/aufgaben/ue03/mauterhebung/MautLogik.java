@@ -10,7 +10,6 @@ public class MautLogik {
 
     private final MautDao mautDao;
 
-    // Wir übergeben das DAO im Konstruktor, damit der Prozessor arbeiten kann
     public MautLogik(MautDao mautDao) {
         this.mautDao = mautDao;
     }
@@ -24,7 +23,6 @@ public class MautLogik {
         float laengeMeter = mautDao.getAbschnittLaenge(abschnittId);
         MautKategorieInfo katInfo = mautDao.findMautKategorie(fzg.ssklId, achsZahl);
 
-        // Berechnung: (Meter / 1000) * (Cent / 100) = Euro
         float kosten = (laengeMeter / 1000.0f) * (katInfo.mautsatz / 100.0f);
 
         mautDao.saveMauterhebung(abschnittId, fzg.fzgId, katInfo.kategorieId, kosten);
@@ -41,16 +39,15 @@ public class MautLogik {
             throw new InvalidVehicleDataException("Falsche Achszahl gebucht.");
         }
 
-        if (buchung.bId != 1) { // 1 = offen
+        if (buchung.bId != 1) {
             throw new AlreadyCruisedException("Buchung ist nicht mehr offen.");
         }
 
-        mautDao.updateBuchungStatus(buchung.buchungId, 3); // 3 = abgeschlossen
+        mautDao.updateBuchungStatus(buchung.buchungId, 3);
     }
 
     private boolean isAchszahlValid(int dbAchsen, int gemesseneAchsen) {
         if (dbAchsen == gemesseneAchsen) return true;
-        // Erlaube höhere Achszahlen bei "Open End" Kategorien (>= 4)
         return dbAchsen >= 4 && gemesseneAchsen > dbAchsen;
     }
 }
