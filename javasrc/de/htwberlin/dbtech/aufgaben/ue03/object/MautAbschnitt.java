@@ -3,7 +3,7 @@ package de.htwberlin.dbtech.aufgaben.ue03.object;
 public class MautAbschnitt {
 
     private int abschnittsId;
-    private float laenge; // Wichtig für die Kostenberechnung
+    private float laenge;
     private String startKoordinate;
     private String zielKoordinate;
     private String name;

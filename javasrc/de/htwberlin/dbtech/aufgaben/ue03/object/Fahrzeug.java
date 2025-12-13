@@ -15,7 +15,6 @@ public class Fahrzeug {
     private Date abmeldedatum;
     private String zulassungsland;
 
-    // --- Getter & Setter ---
 
     public long getFzId() {
         return fzId;

@@ -5,7 +5,7 @@ public interface BuchungDao {
     /**
      * Findet eine Buchung basierend auf dem Kennzeichen und dem Abschnitt.
      *
-     * @param kz          Das Kennzeichen des Fahrzeugs.
+     * @param kz Das Kennzeichen des Fahrzeugs.
      * @param abschnittId Die ID des Mautabschnitts.
      * @return Die Buchung mit dem angegebenen Kennzeichen und Abschnitt.
      */

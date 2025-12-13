@@ -11,8 +11,9 @@ public interface FahrzeugDao {
      */
     Fahrzeug findByKennzeichen(String kz);
     /**
-     * Findet ein Fahrzeuggerät anhand der Fahrzeug-ID (Fremdschlüssel).
-     * Wird benötigt, um zu prüfen, ob ein Auto eine OBU hat.
+     * Findet ein Fahrzeuggerät anhand der Fahrzeug-ID.
+     * @param fzId Die Fahrzeug-ID.
+     * @return Das Fahrzeuggerät mit der angegebenen Fahrzeug-ID.
      */
     FahrzeugGerat findGeratByFzId(long fzId);
 }

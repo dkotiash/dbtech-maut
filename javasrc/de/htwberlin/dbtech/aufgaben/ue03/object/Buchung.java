@@ -5,15 +5,13 @@ import java.sql.Date;
 public class Buchung {
 
     private long buchungId;
-    private int bId; // Status ID
+    private int bId;
     private int abschnittsId;
     private int kategorieId;
     private String kennzeichen;
     private Date buchungsdatum;
     private Date befahrungsdatum;
     private float kosten;
-
-    // --- Getter & Setter ---
 
     public long getBuchungId() {
         return buchungId;

@@ -6,7 +6,7 @@ public class Mauterhebung {
 
     private long mautId;
     private int abschnittsId;
-    private long fzgId;       // Referenz auf FAHRZEUGGERAT
+    private long fzgId;
     private int kategorieId;
     private Date befahrungsdatum;
     private float kosten;

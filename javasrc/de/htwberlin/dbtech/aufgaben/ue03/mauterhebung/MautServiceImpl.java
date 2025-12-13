@@ -17,7 +17,7 @@ public class MautServiceImpl implements IMautService {
 	//für bessere Lesbarkeit
 	private static final int STATUS_ID_OFFEN = 1;
 	private static final int STATUS_ID_GESCHLOSSEN = 3;
-	private static final int SCHWELLE_OPEN_END_ACHSEN = 4; // Ab 4 Achsen gilt ">= 4"
+	private static final int SCHWELLE_OPEN_END_ACHSEN = 4;
 	private static final float UMRECHNUNG_M_IN_KM = 1000.0f;
 	private static final float UMRECHNUNG_CENT_IN_EURO = 100.0f;
 
@@ -60,6 +60,10 @@ public class MautServiceImpl implements IMautService {
 	//Hilfsmethoden
 	/**
 	 * Verarbeitet die Mauterhebung im automatischen Verfahren (mit Gerät).
+	 * @param fzg Das Fahrzeugobjekt
+	 * @param gerat Das Fahrzeuggerätobjekt
+	 * @param abschnittId Die ID des Mautabschnitts
+	 * @param achsZahl Die gemessene Achszahl
 	 */
 	private void verarbeiteAutomatisch(Fahrzeug fzg, FahrzeugGerat gerat, int abschnittId, int achsZahl) {
 		if (!isAchszahlValid(fzg.getAchsen(), achsZahl)) {
@@ -84,6 +88,9 @@ public class MautServiceImpl implements IMautService {
 
 	/**
 	 * Verarbeitet die Mauterhebung im manuellen Verfahren (mit Buchung).
+	 * @param kennzeichen Das Kennzeichen des Fahrzeugs
+	 * @param abschnittId Die IDdes Mautabschnitts
+	 * @param achsZahl Diegemessene Achszahl
 	 */
 	private void verarbeiteManuell(String kennzeichen, int abschnittId, int achsZahl) {
 		Buchung buchung = buchungDao.findByKennzeichenAndAbschnitt(kennzeichen, abschnittId);
@@ -112,6 +119,9 @@ public class MautServiceImpl implements IMautService {
 	/**
 	 * Berechnet die Mautkosten in Euro.
 	 * Formel: (Meter / 1000) * (Cent / 100)
+	 * @param laengeMeter Die Laenge des Mautabschnitts in Metern
+	 * @param satzCentProKm Der Mautsatz in Centpro Kilometer
+	 * @return Die berechneten Kostenin Euro
 	 */
 	private float berechneKosten(float laengeMeter, float satzCentProKm) {
 		return (laengeMeter / UMRECHNUNG_M_IN_KM) * (satzCentProKm / UMRECHNUNG_CENT_IN_EURO);
@@ -119,6 +129,9 @@ public class MautServiceImpl implements IMautService {
 
 	/**
 	 * Validiert die Achszahl. Erlaubt Abweichung nach oben, wenn DB-Wert >= 4 (Open End).
+	 * @param dbAchsen Die in der DB hinterlegte Achszahl
+	 * @param gemessen Die gemessene Achszahl
+	 * @return true, wenn die Achszahlen übereinstimmen oder DB-Wert >= 4 und gemessen > DB-Wert; sonst false
 	 */
 	private boolean isAchszahlValid(int dbAchsen, int gemessen) {
 		return dbAchsen == gemessen || (dbAchsen >= SCHWELLE_OPEN_END_ACHSEN && gemessen > dbAchsen);
@@ -126,6 +139,7 @@ public class MautServiceImpl implements IMautService {
 
 	/**
 	 * Hilfsmethode zum Loggen und Werfen der Exception (vermeidet Code-Duplizierung).
+	 * @param msg Die Fehlermeldung
 	 */
 	private void logAndThrowInvalidData(String msg) {
 		L.error(msg);

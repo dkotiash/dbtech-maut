@@ -6,6 +6,7 @@ public interface MauterhebungDao {
     /**
      * Speichert eine neue Mauterhebung in der Datenbank.
      * Ermittelt automatisch die nächste ID.
+     * @param mauterhebung Die Mauterhebung, die gespeichert werden soll.
      */
     void create(Mauterhebung mauterhebung);
 }
